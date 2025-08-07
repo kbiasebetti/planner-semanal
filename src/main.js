@@ -1,3 +1,133 @@
 import './style.css'
 
-console.log("Planner Semanal - Projeto Inicializado!")
+let tasks = [
+    { id: 1, day: 'segunda', title: 'Reunião de Alinhamento', startTime: '09:00', endTime: '09:30', category: 'trabalho' },
+    { id: 2, day: 'segunda', title: 'Estudar Cypress', startTime: '10:00', endTime: '11:30', category: 'estudo' },
+]
+
+// Elementos do DOM
+const modal = document.getElementById('taskModal')
+const addTaskBtn = document.getElementById('addTaskBtn')
+const closeBtn = document.querySelector('.close-btn')
+const taskForm = document.getElementById('taskForm')
+const modalTitle = document.getElementById('modalTitle')
+const taskIdInput = document.getElementById('taskId')
+
+// Funções
+function openModal(task = null) {
+    taskForm.reset()
+    if (task) {
+        // Modo Edição
+        modalTitle.innerText = "Editar Tarefa"
+        taskIdInput.value = task.id
+        document.getElementById('taskTitle').value = task.title
+        document.getElementById('taskDay').value = task.day
+        document.getElementById('startTime').value = task.startTime
+        document.getElementById('endTime').value = task.endTime
+        document.getElementById('taskCategory').value = task.category
+    } else {
+        // Modo Adição
+        modalTitle.innerText = "Nova Tarefa"
+        taskIdInput.value = '' 
+    }
+    modal.style.display = 'block'
+}
+
+function closeModal() {
+    modal.style.display = 'none'
+}
+
+// Funções do CRUD
+function addTask(taskData) {
+    const newId = Date.now()
+    const newTask = { id: newId, ...taskData }
+    tasks.push(newTask)
+    renderSchedule()
+}
+
+function updateTask(updatedTaskData) {
+    const taskIndex = tasks.findIndex(t => t.id == updatedTaskData.id)
+    if (taskIndex > -1) {
+        tasks[taskIndex] = { ...tasks[taskIndex], ...updatedTaskData }
+    }
+    renderSchedule()
+}
+
+function deleteTask(taskId) {
+    tasks = tasks.filter(task => task.id !== taskId)
+    renderSchedule()
+}
+
+// Funções de Renderização
+function renderSchedule() {
+    const containers = document.querySelectorAll('.tasks-container')
+    containers.forEach(container => { container.innerHTML = '' })
+
+    tasks.sort((a, b) => a.startTime.localeCompare(b.startTime))
+
+    tasks.forEach(task => {
+        const container = document.getElementById(`${task.day}-tasks`)
+        if (container) {
+            const taskCard = document.createElement('div')
+            taskCard.className = `task-card ${task.category}`
+            taskCard.dataset.id = task.id
+            taskCard.innerHTML = `
+                <h3>${task.title}</h3>
+                <p>${task.startTime} - ${task.endTime}</p>
+                <button class="delete-task-btn">&times</button> 
+            `
+
+            // Adiciona evento de deletar
+            taskCard.querySelector('.delete-task-btn').addEventListener('click', (e) => {
+                e.stopPropagation()
+                deleteTask(task.id)
+            })
+
+            // Adiciona evento de editar (clique no card todo)
+            taskCard.addEventListener('click', () => {
+                openModal(task)
+            })
+
+            container.appendChild(taskCard)
+        }
+    })
+}
+
+// Event Listeners
+// Abrir modal para nova tarefa
+addTaskBtn.addEventListener('click', () => openModal())
+
+// Fechar modal no 'x'
+closeBtn.addEventListener('click', closeModal)
+
+// Fechar modal clicando fora dele
+window.addEventListener('click', (event) => {
+    if (event.target == modal) {
+        closeModal()
+    }
+})
+
+// Lógica do Formulário (Salvar tarefa)
+taskForm.addEventListener('submit', (event) => {
+    event.preventDefault()
+
+    const taskData = {
+        id: document.getElementById('taskId').value,
+        title: document.getElementById('taskTitle').value,
+        day: document.getElementById('taskDay').value,
+        startTime: document.getElementById('startTime').value,
+        endTime: document.getElementById('endTime').value,
+        category: document.getElementById('taskCategory').value,
+    }
+
+    if (taskData.id) {
+        updateTask(taskData)
+    } else {
+        addTask(taskData)
+    }
+
+    closeModal()
+})
+
+// Renderização Inicial
+document.addEventListener('DOMContentLoaded', renderSchedule)
