@@ -1,9 +1,7 @@
-import './style.css'
+import { loadTasksFromStorage, saveTasksToStorage } from './storage'
+import '../styles/style.css'
 
-let tasks = [
-    { id: 1, day: 'segunda', title: 'Reunião de Alinhamento', startTime: '09:00', endTime: '09:30', category: 'trabalho' },
-    { id: 2, day: 'segunda', title: 'Estudar Cypress', startTime: '10:00', endTime: '11:30', category: 'estudo' },
-]
+let tasks = loadTasksFromStorage()
 
 // Elementos do DOM
 const modal = document.getElementById('taskModal')
@@ -42,6 +40,8 @@ function addTask(taskData) {
     const newId = Date.now()
     const newTask = { id: newId, ...taskData }
     tasks.push(newTask)
+
+    saveTasksToStorage(tasks)
     renderSchedule()
 }
 
@@ -49,12 +49,14 @@ function updateTask(updatedTaskData) {
     const taskIndex = tasks.findIndex(t => t.id == updatedTaskData.id)
     if (taskIndex > -1) {
         tasks[taskIndex] = { ...tasks[taskIndex], ...updatedTaskData }
+        saveTasksToStorage(tasks)
     }
     renderSchedule()
 }
 
 function deleteTask(taskId) {
     tasks = tasks.filter(task => task.id !== taskId)
+    saveTasksToStorage(tasks)
     renderSchedule()
 }
 
