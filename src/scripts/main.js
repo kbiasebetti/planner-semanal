@@ -2,6 +2,8 @@ import { loadTasksFromStorage, saveTasksToStorage } from './storage'
 import '../styles/style.css'
 
 let tasks = loadTasksFromStorage()
+let taskIdToDelete = null
+let notificationTimer
 
 // Elementos do DOM
 const modal = document.getElementById('taskModal')
@@ -10,6 +12,10 @@ const closeBtn = document.querySelector('.close-btn')
 const taskForm = document.getElementById('taskForm')
 const modalTitle = document.getElementById('modalTitle')
 const taskIdInput = document.getElementById('taskId')
+const deleteConfirmModal = document.getElementById('deleteConfirmModal')
+const confirmDeleteBtn = document.getElementById('confirmDeleteBtn')
+const cancelDeleteBtn = document.getElementById('cancelDeleteBtn')
+const notification = document.getElementById('notification')
 
 // Funções
 function openModal(task = null) {
@@ -26,7 +32,7 @@ function openModal(task = null) {
     } else {
         // Modo Adição
         modalTitle.innerText = "Nova Tarefa"
-        taskIdInput.value = '' 
+        taskIdInput.value = ''
     }
     modal.style.display = 'block'
 }
@@ -35,9 +41,32 @@ function closeModal() {
     modal.style.display = 'none'
 }
 
+function openDeleteConfirmation(taskId) {
+    taskIdToDelete = taskId
+    deleteConfirmModal.style.display = 'block'
+}
+
+function closeDeleteConfirmation() {
+    taskIdToDelete = null
+    deleteConfirmModal.style.display = 'none'
+}
+
+function showNotification(message) {
+    clearTimeout(notificationTimer)
+
+    notification.textContent = message
+    notification.classList.add('show')
+
+    notificationTimer = setTimeout(() => {
+        notification.classList.remove('show')
+    }, 3000)
+}
+
 // Funções do CRUD
 function addTask(taskData) {
     const newId = Date.now()
+    delete taskData.id
+
     const newTask = { id: newId, ...taskData }
     tasks.push(newTask)
 
@@ -58,6 +87,7 @@ function deleteTask(taskId) {
     tasks = tasks.filter(task => task.id !== taskId)
     saveTasksToStorage(tasks)
     renderSchedule()
+    showNotification("Tarefa deletada com sucesso!")
 }
 
 // Funções de Renderização
@@ -82,7 +112,7 @@ function renderSchedule() {
             // Adiciona evento de deletar
             taskCard.querySelector('.delete-task-btn').addEventListener('click', (e) => {
                 e.stopPropagation()
-                deleteTask(task.id)
+                openDeleteConfirmation(task.id)
             })
 
             // Adiciona evento de editar (clique no card todo)
@@ -130,6 +160,14 @@ taskForm.addEventListener('submit', (event) => {
 
     closeModal()
 })
+
+confirmDeleteBtn.addEventListener('click', () => {
+    if (taskIdToDelete) {
+        deleteTask(taskIdToDelete)
+    }
+    closeDeleteConfirmation()
+})
+cancelDeleteBtn.addEventListener('click', closeDeleteConfirmation)
 
 // Renderização Inicial
 document.addEventListener('DOMContentLoaded', renderSchedule)

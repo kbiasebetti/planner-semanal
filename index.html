@@ -9,6 +9,8 @@
 </head>
 
 <body>
+    <div id="notification" class="notification"></div>
+
     <div class="app-container">
         <header>
             <h1>Planner Semanal</h1>
@@ -52,9 +54,7 @@
             <h2 id="modalTitle">Nova Tarefa</h2>
             <form id="taskForm">
                 <input type="hidden" id="taskId">
-
                 <input type="text" id="taskTitle" placeholder="Título da Tarefa" required>
-
                 <select id="taskDay" required>
                     <option value="" disabled selected>Selecione o Dia</option>
                     <option value="segunda">Segunda-feira</option>
@@ -65,13 +65,11 @@
                     <option value="sabado">Sábado</option>
                     <option value="domingo">Domingo</option>
                 </select>
-
                 <div class="time-inputs">
                     <input type="time" id="startTime" required>
                     <span>até</span>
                     <input type="time" id="endTime" required>
                 </div>
-
                 <select id="taskCategory" required>
                     <option value="" disabled selected>Selecione a Categoria</option>
                     <option value="trabalho">Trabalho</option>
@@ -80,11 +78,21 @@
                     <option value="saude">Saúde/Exercício</option>
                     <option value="lazer">Lazer</option>
                 </select>
-
                 <button type="submit">Salvar Tarefa</button>
             </form>
         </div>
     </div>
+
+    <div id="deleteConfirmModal" class="modal-confirm">
+        <div class="modal-confirm-content">
+            <p>Você tem certeza que quer deletar esta tarefa?</p>
+            <div class="modal-confirm-actions">
+                <button id="cancelDeleteBtn">Cancelar</button>
+                <button id="confirmDeleteBtn">Deletar</button>
+            </div>
+        </div>
+    </div>
+
     <script type="module" src="src/scripts/main.js"></script>
 </body>
 

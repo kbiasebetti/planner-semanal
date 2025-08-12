@@ -1,20 +1,34 @@
 /* Variavéis */
 :root {
+    /* Cores do Layout Principal */
     --bg-color: #f4f7fa;
     --main-text: #333;
     --primary-color: #4a90e2;
     --card-bg: #ffffff;
+    --border-color: #ddd;
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+    /* Cores das Categorias de Tarefa */
     --cat-trabalho: #4a90e2;
     --cat-estudo: #7ed321;
     --cat-pessoal: #bd10e0;
     --cat-saude: #f5a623;
     --cat-lazer: #e01053;
+
+    /* Cores de Ação e Feedback */
+    --success-color: #27ae60; 
+    --danger-color: #e53e3e; 
+    --danger-color-dark: #c53030; 
+    --neutral-color: #888; 
+    --neutral-color-dark: #999; 
+    --color-white: #ffffff;
 }
 /* Fim - Variavéis */
 
 /* Estilos Globais */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
 }
 
@@ -35,7 +49,7 @@ body {
 .app-container {
     max-width: 1400px;
     width: 100%;
-    transform: translateY(-6vh); 
+    transform: translateY(-6vh);
 }
 
 header {
@@ -235,7 +249,95 @@ header h1 {
 #taskForm button:hover {
     background-color: #3dbca1;
 }
+
+.modal-confirm {
+    display: none;
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.6);
+    animation: fadeIn 0.2s;
+}
+
+.modal-confirm-content {
+    background-color: var(--card-bg);
+    color: var(--main-text);
+    margin: 20% auto;
+    padding: 25px;
+    border: 1px solid var(--border-color);
+    width: 90%;
+    max-width: 400px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.modal-confirm-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.modal-confirm-actions button {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.modal-confirm-actions button:hover {
+    transform: translateY(-2px);
+}
+
+#confirmDeleteBtn {
+    background-color: var(--danger-color);
+    color: var(--color-white);
+}
+
+#confirmDeleteBtn:hover {
+    background-color: var(--danger-color-dark);
+}
+
+#cancelDeleteBtn {
+    background-color: var(--neutral-color); 
+    color: var(--color-white); 
+}
+
+#cancelDeleteBtn:hover {
+    background-color: var(--neutral-color-dark); 
+}
 /* Fim - Estilos do Modal */
+
+/* Estilos do Toast */
+.notification {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translate(-50%, -100px); 
+  background-color: var(--success-color);
+  color: var(--color-white);
+  padding: 12px 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 2000;
+  opacity: 0;
+  visibility: hidden;
+  transition: transform 0.4s ease, opacity 0.4s ease, visibility 0.4s;
+}
+
+.notification.show {
+  transform: translate(-50%, 0); 
+  opacity: 1;
+  visibility: visible;
+}
+/* Fim - Estilos do Toast */
 
 /* Animações */
 @keyframes fadeIn {
