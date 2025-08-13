@@ -43,7 +43,7 @@ function closeModal() {
 
 function openDeleteConfirmation(taskId) {
     taskIdToDelete = taskId
-    deleteConfirmModal.style.display = 'block'
+    deleteConfirmModal.style.display = 'flex'
 }
 
 function closeDeleteConfirmation() {
@@ -66,8 +66,7 @@ function showNotification(message) {
 function addTask(taskData) {
     const newId = Date.now()
     delete taskData.id
-
-    const newTask = { id: newId, ...taskData }
+    const newTask = { id: newId, ...taskData, isComplete: false }
     tasks.push(newTask)
 
     saveTasksToStorage(tasks)
@@ -90,6 +89,17 @@ function deleteTask(taskId) {
     showNotification("Tarefa deletada com sucesso!")
 }
 
+function toggleTaskComplete(taskId) {
+    const taskIndex = tasks.findIndex(t => t.id == taskId)
+
+    if (taskIndex > -1) {
+        tasks[taskIndex].isComplete = !tasks[taskIndex].isComplete
+    }
+    
+    saveTasksToStorage(tasks)
+    renderSchedule()
+}
+
 // Funções de Renderização
 function renderSchedule() {
     const containers = document.querySelectorAll('.tasks-container')
@@ -101,12 +111,15 @@ function renderSchedule() {
         const container = document.getElementById(`${task.day}-tasks`)
         if (container) {
             const taskCard = document.createElement('div')
-            taskCard.className = `task-card ${task.category}`
+            taskCard.className = `task-card ${task.category} ${task.isComplete ? 'completed' : ''}`
             taskCard.dataset.id = task.id
             taskCard.innerHTML = `
-                <h3>${task.title}</h3>
-                <p>${task.startTime} - ${task.endTime}</p>
-                <button class="delete-task-btn">&times</button> 
+                <input type="checkbox" class="task-complete-checkbox" ${task.isComplete ? 'checked' : ''}>
+                <div class="task-content">
+                    <h3>${task.title}</h3>
+                    <p>${task.startTime} - ${task.endTime}</p>
+                </div>
+                <button class="delete-task-btn">&times;</button>
             `
 
             // Adiciona evento de deletar
@@ -115,8 +128,14 @@ function renderSchedule() {
                 openDeleteConfirmation(task.id)
             })
 
+            // Adiciona para a checkbox
+            taskCard.querySelector('.task-complete-checkbox').addEventListener('click', (e) => {
+                e.stopPropagation()
+                toggleTaskComplete(task.id)
+            })
+
             // Adiciona evento de editar (clique no card todo)
-            taskCard.addEventListener('click', () => {
+            taskCard.querySelector('.task-content').addEventListener('click', () => {
                 openModal(task)
             })
 
