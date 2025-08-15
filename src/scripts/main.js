@@ -51,15 +51,35 @@ function closeDeleteConfirmation() {
     deleteConfirmModal.style.display = 'none'
 }
 
-function showNotification(message) {
+function showNotification(message, type = 'sucess') {
     clearTimeout(notificationTimer)
 
     notification.textContent = message
+    notification.style.backgroundColor = type === 'error' ? 'var(--danger-color)' : 'var(--success-color)'
     notification.classList.add('show')
 
     notificationTimer = setTimeout(() => {
         notification.classList.remove('show')
     }, 3000)
+}
+
+function isTimeConflict(newTask) {
+    for (const existingTask of tasks) {
+        if (existingTask.id == newTask.id) {
+            continue
+        }
+        if (existingTask.day === newTask.day) {
+            const existingStart = existingTask.startTime
+            const existingEnd = existingTask.endTime
+            const newStart = newTask.startTime
+            const newEnd = newTask.endTime
+
+            if (newStart < existingEnd && newEnd > existingStart) {
+                return true
+            }
+        }
+    }
+    return
 }
 
 // Funções do CRUD
@@ -95,7 +115,7 @@ function toggleTaskComplete(taskId) {
     if (taskIndex > -1) {
         tasks[taskIndex].isComplete = !tasks[taskIndex].isComplete
     }
-    
+
     saveTasksToStorage(tasks)
     renderSchedule()
 }
@@ -171,10 +191,22 @@ taskForm.addEventListener('submit', (event) => {
         category: document.getElementById('taskCategory').value,
     }
 
+    if (taskData.startTime >= taskData.endTime) {
+        showNotification("O horário final deve ser depois do horário inicial", 'error')
+        return
+    }
+
+    if (isTimeConflict(taskData)) {
+        showNotification("Já existe uma tarefa nesse período!", 'error')
+        return
+    }
+
     if (taskData.id) {
         updateTask(taskData)
+        showNotification("Tarefa atualizada com sucesso!")
     } else {
         addTask(taskData)
+        showNotification("Tarefa criada com sucesso!")
     }
 
     closeModal()

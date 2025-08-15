@@ -225,8 +225,7 @@ header h1 {
 }
 
 .add-task-btn:hover {
-    background-color: var(--primary-color-dark);
-    transform: translateY(-2px);
+    background-color: #144277;
 }
 /* Fim - Container das tarefas */
 
@@ -311,6 +310,9 @@ header h1 {
     overflow: hidden;
     background-color: rgba(0, 0, 0, 0.6);
     animation: fadeIn 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .modal-confirm-content {
