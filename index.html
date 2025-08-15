@@ -9,22 +9,91 @@
 </head>
 
 <body>
+    <div id="notification" class="notification"></div>
+
     <div class="app-container">
         <header>
             <h1>Planner Semanal</h1>
+            <button id="addTaskBtn" class="add-task-btn">+ Adicionar Tarefa</button>
         </header>
-        
         <main class="schedule-grid">
-            <div class="day-column"><h2>Segunda</h2></div>
-            <div class="day-column"><h2>Terça</h2></div>
-            <div class="day-column"><h2>Quarta</h2></div>
-            <div class="day-column"><h2>Quinta</h2></div>
-            <div class="day-column"><h2>Sexta</h2></div>
-            <div class="day-column"><h2>Sábado</h2></div>
-            <div class="day-column"><h2>Domingo</h2></div>
+            <div class="day-column">
+                <h2>Segunda</h2>
+                <div class="tasks-container" id="segunda-tasks"></div>
+            </div>
+            <div class="day-column">
+                <h2>Terça</h2>
+                <div class="tasks-container" id="terca-tasks"></div>
+            </div>
+            <div class="day-column">
+                <h2>Quarta</h2>
+                <div class="tasks-container" id="quarta-tasks"></div>
+            </div>
+            <div class="day-column">
+                <h2>Quinta</h2>
+                <div class="tasks-container" id="quinta-tasks"></div>
+            </div>
+            <div class="day-column">
+                <h2>Sexta</h2>
+                <div class="tasks-container" id="sexta-tasks"></div>
+            </div>
+            <div class="day-column">
+                <h2>Sábado</h2>
+                <div class="tasks-container" id="sabado-tasks"></div>
+            </div>
+            <div class="day-column">
+                <h2>Domingo</h2>
+                <div class="tasks-container" id="domingo-tasks"></div>
+            </div>
         </main>
     </div>
-    <script type="module" src="/src/main.js"></script>
+
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 id="modalTitle">Nova Tarefa</h2>
+            <form id="taskForm">
+                <input type="hidden" id="taskId">
+                <input type="text" id="taskTitle" placeholder="Título da Tarefa" required>
+                <select id="taskDay" required>
+                    <option value="" disabled selected>Selecione o Dia</option>
+                    <option value="segunda">Segunda-feira</option>
+                    <option value="terca">Terça-feira</option>
+                    <option value="quarta">Quarta-feira</option>
+                    <option value="quinta">Quinta-feira</option>
+                    <option value="sexta">Sexta-feira</option>
+                    <option value="sabado">Sábado</option>
+                    <option value="domingo">Domingo</option>
+                </select>
+                <div class="time-inputs">
+                    <input type="time" id="startTime" required>
+                    <span>até</span>
+                    <input type="time" id="endTime" required>
+                </div>
+                <select id="taskCategory" required>
+                    <option value="" disabled selected>Selecione a Categoria</option>
+                    <option value="trabalho">Trabalho</option>
+                    <option value="estudo">Estudo</option>
+                    <option value="pessoal">Projeto Pessoal</option>
+                    <option value="saude">Saúde/Exercício</option>
+                    <option value="lazer">Lazer</option>
+                </select>
+                <button type="submit">Salvar Tarefa</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="deleteConfirmModal" class="modal-confirm">
+        <div class="modal-confirm-content">
+            <p>Você tem certeza que quer deletar esta tarefa?</p>
+            <div class="modal-confirm-actions">
+                <button id="cancelDeleteBtn">Cancelar</button>
+                <button id="confirmDeleteBtn">Deletar</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="src/scripts/main.js"></script>
 </body>
 
 </html>
