@@ -391,6 +391,16 @@ header h1 {
 }
 /* Fim - Estilos do Toast */
 
+/* Drag and Drop */
+.task-card.dragging {
+  opacity: 0.5;
+}
+
+.day-column.drag-over {
+  box-shadow: 0 0 25px rgba(85, 85, 85, 0.5);
+}
+/* Fim - Drag and Drop */
+
 /* Animações */
 @keyframes fadeIn {
     from {

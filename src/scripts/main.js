@@ -120,6 +120,24 @@ function toggleTaskComplete(taskId) {
     renderSchedule()
 }
 
+function handleDrop(event) {
+    event.preventDefault()
+
+    const draggedTaskId = event.dataTransfer.getData('text/plain')
+    const task = tasks.find(t => t.id == draggedTaskId)
+    const dropZone = event.currentTarget.closest('.day-column')
+    const newDay = dropZone.querySelector('.tasks-container').id.replace('-tasks', '')
+
+    if (task && newDay) {
+        task.day = newDay
+        saveTasksToStorage(tasks)
+        renderSchedule()
+        showNotification("Tarefa movida com sucesso!")
+    }
+
+    document.querySelectorAll('.day-column').forEach(col => col.classList.remove('drag-over'))
+}
+
 // Funções de Renderização
 function renderSchedule() {
     const containers = document.querySelectorAll('.tasks-container')
@@ -133,6 +151,7 @@ function renderSchedule() {
             const taskCard = document.createElement('div')
             taskCard.className = `task-card ${task.category} ${task.isComplete ? 'completed' : ''}`
             taskCard.dataset.id = task.id
+            taskCard.setAttribute('draggable', true)
             taskCard.innerHTML = `
                 <input type="checkbox" class="task-complete-checkbox" ${task.isComplete ? 'checked' : ''}>
                 <div class="task-content">
@@ -141,6 +160,15 @@ function renderSchedule() {
                 </div>
                 <button class="delete-task-btn">&times;</button>
             `
+
+            taskCard.addEventListener('dragstart', (event) => {
+                event.dataTransfer.setData('text/plain', task.id)
+                setTimeout(() => taskCard.classList.add('dragging'), 0)
+            })
+
+            taskCard.addEventListener('dragend', () => {
+                taskCard.classList.add('dragging', 0)
+            })
 
             // Adiciona evento de deletar
             taskCard.querySelector('.delete-task-btn').addEventListener('click', (e) => {
@@ -161,6 +189,20 @@ function renderSchedule() {
 
             container.appendChild(taskCard)
         }
+    })
+
+    const dayColums = document.querySelectorAll('.day-column')
+    dayColums.forEach(column => {
+        column.addEventListener('dragover', (event) => {
+            event.preventDefault()
+            column.classList.add('drag-over')
+        })
+
+        column.addEventListener('dragleave', () => {
+            column.classList.remove('drag-over')
+        })
+
+        column.addEventListener('drop', handleDrop)
     })
 }
 
