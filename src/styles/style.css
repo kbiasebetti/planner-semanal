@@ -22,6 +22,43 @@
     --neutral-color: #888; 
     --neutral-color-dark: #999; 
     --color-white: #ffffff;
+    --action-color: #50e3c2;
+    --action-color-dark: #3dbca1
+}
+
+/* Dark Theme */
+body.dark-theme {
+    --bg-color: #121212;
+    --day-column-bg: #1E1E1E;
+    --card-bg: #2C2C34;
+    --primary-color: #58a6ff;
+    --main-text: #E0E0E0;
+    --border-color: #444;
+    --primary-color-dark: #357ABD;
+    --card-bg-completed: #2a2a30;
+    --text-color-light: #BDBDBD;
+    --text-color-muted: #757575;
+}
+
+body,
+.day-column,
+.task-card,
+.modal-content,
+.modal-confirm-content,
+#taskForm input,
+#taskForm select {
+    transition: background-color 0.3s ease, color 0.2s ease, border-color 0.3s ease;
+}
+
+body.dark-theme #taskForm input,
+body.dark-theme #taskForm select {
+    background-color: var(--day-column-bg);
+    color: var(--main-text); 
+    border: 1px solid var(--border-color); 
+}
+
+body.dark-theme #taskForm button {
+    color: #121212; 
 }
 /* Fim - Variavéis */
 
@@ -79,7 +116,7 @@ header h1 {
 }
 
 .day-column {
-    background-color: #ffffff;
+    background-color: var(--day-column-bg, #ffffff);
     border-radius: 8px;
     padding: 15px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -290,7 +327,7 @@ header h1 {
 }
 
 #taskForm button {
-    background-color: #50e3c2;
+    background-color: var(--action-color);
     color: white;
     padding: 14px;
     border: none;
@@ -302,7 +339,7 @@ header h1 {
 }
 
 #taskForm button:hover {
-    background-color: #3dbca1;
+    background-color: var(--action-color-dark);
 }
 
 .modal-confirm {
