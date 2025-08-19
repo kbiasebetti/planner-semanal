@@ -4,6 +4,7 @@ import '../styles/style.css'
 let tasks = loadTasksFromStorage()
 let taskIdToDelete = null
 let notificationTimer
+const THEME_KEY = 'planner_theme'
 
 // Elementos do DOM
 const modal = document.getElementById('taskModal')
@@ -16,6 +17,8 @@ const deleteConfirmModal = document.getElementById('deleteConfirmModal')
 const confirmDeleteBtn = document.getElementById('confirmDeleteBtn')
 const cancelDeleteBtn = document.getElementById('cancelDeleteBtn')
 const notification = document.getElementById('notification')
+const themeToggle = document.getElementById('theme-toggle')
+const body = document.body
 
 // Funções
 function openModal(task = null) {
@@ -80,6 +83,25 @@ function isTimeConflict(newTask) {
         }
     }
     return
+}
+
+function applyTheme(theme) {
+    if (theme === 'dark') {
+        body.classList.add('dark-theme')
+        themeToggle.checked = true
+    } else {
+        body.classList.remove('dark-theme')
+        themeToggle.checked = false
+    }
+}
+
+function saveThemePreference(theme) {
+    localStorage.setItem(THEME_KEY, theme)
+}
+
+function loadThemePreference() {
+    const savedTheme = localStorage.getItem(THEME_KEY) || 'light'
+    applyTheme(savedTheme)
 }
 
 // Funções do CRUD
@@ -262,5 +284,14 @@ confirmDeleteBtn.addEventListener('click', () => {
 })
 cancelDeleteBtn.addEventListener('click', closeDeleteConfirmation)
 
+themeToggle.addEventListener('change', () => {
+    const newTheme = themeToggle.checked ? 'dark' : 'light'
+    applyTheme(newTheme)
+    saveThemePreference(newTheme)
+})
+
 // Renderização Inicial
-document.addEventListener('DOMContentLoaded', renderSchedule)
+document.addEventListener('DOMContentLoaded', () => {
+    loadThemePreference()
+    renderSchedule()
+})
