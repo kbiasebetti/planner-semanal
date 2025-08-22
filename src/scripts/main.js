@@ -295,3 +295,5 @@ document.addEventListener('DOMContentLoaded', () => {
     loadThemePreference()
     renderSchedule()
 })
+
+lucide.createIcons()

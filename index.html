@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Planner Semanal</title>
     <link rel="stylesheet" href="/src/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body>
@@ -21,7 +22,13 @@
                         <span class="slider round"></span>
                     </label>
                 </div>
-                <button id="addTaskBtn" class="add-task-btn">+ Adicionar Tarefa</button>
+
+                <button id="manageCategoriesBtn" class="icon-btn" aria-label="Gerenciar Categorias">
+                    <i data-lucide="tags"></i>
+                </button>
+                <button id="addTaskBtn" class="icon-btn add-task-btn" aria-label="Adicionar Nova Tarefa">
+                    <i data-lucide="plus"></i>
+                </button>
             </div>
         </header>
         <main class="schedule-grid">

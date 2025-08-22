@@ -4,6 +4,7 @@
     --bg-color: #f4f7fa;
     --main-text: #333;
     --primary-color: #4a90e2;
+    --hover-add-task: #2d68a3;
     --card-bg: #ffffff;
     --border-color: #ddd;
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -105,6 +106,39 @@ header h1 {
     display: flex;
     align-items: center;
     gap: 20px;
+}
+
+.icon-btn {
+    background-color: transparent;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.icon-btn .lucide {
+    width: 22px;
+    height: 22px;
+}
+
+.icon-btn:hover {
+    background-color: var(--primary-color);
+    color: var(--color-white);
+}
+
+.add-task-btn {
+    background-color: var(--primary-color);
+    color: var(--color-white);
+}
+
+.add-task-btn:hover {
+    background-color: var(--hover-add-task);
 }
 /* Fim - Layout Principal */
 
@@ -253,22 +287,6 @@ header h1 {
 
 .task-card.lazer {
     border-left-color: var(--cat-lazer);
-}
-
-.add-task-btn {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-size: 1em;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.add-task-btn:hover {
-    background-color: #144277;
 }
 /* Fim - Container das tarefas */
 
